@@ -24,4 +24,4 @@ kubectl apply -f contig.yaml
 ## Документация
 
 - [Техническое задание](docs/TZ.md)
-- [Отчёт](docs/OTCHET.md)
+
