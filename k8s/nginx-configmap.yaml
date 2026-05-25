@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-secure-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_tokens off;
+
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-Frame-Options "DENY" always;
+
+        location ~ ^/(admin|internal|config|backup|\.git|\.env) {
+            deny all;
+            return 403;
+        }
+
+        location ~ \.\. {
+            deny all;
+            return 403;
+        }
+
+        location / {
+            proxy_pass http://127.0.0.1:5000;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+        }
+
+        location /static/ {
+            proxy_pass http://127.0.0.1:5000/static/;
+        }
+    }
